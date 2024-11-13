@@ -63,5 +63,20 @@ public class TestDbContext : DbContext
                 }
             );
         });
+
+        modelBuilder.Entity<PlasmaRideResponsible>(x =>
+        {
+            x.HasKey(p => p.Id);
+        });
+        
+        modelBuilder.Entity<PlasmaRide>(x =>
+        {
+            x.HasKey(p => p.Id);
+
+            x.HasOne(x => x.Responsible)
+                .WithMany()
+                .IsRequired();
+
+        });
     }
 }
