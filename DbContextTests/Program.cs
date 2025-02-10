@@ -120,4 +120,29 @@ var appointmentWithTracking = new Appointment
 context.Add(appointmentWithTracking);
 await context.SaveChangesAsync();
 
+
+// save timeslot with extra stuff?
+var plasmaRideAppointment = new AppointmentPlasmaRide()
+{
+    AppointmentTime = DateTime.Now,
+    DepartureTime = TimeOnly.FromDateTime(DateTime.Now)
+};
+context.Add(plasmaRideAppointment);
+await context.SaveChangesAsync();
+
+var appointments = context.Appointments.ToList();
+
+var appointmentsVms = context.Appointments
+    .Select(x => new
+    {
+        x.Id,
+        x.AppointmentTime,
+        DepartureTime = (x is AppointmentPlasmaRide) ? (x as AppointmentPlasmaRide).DepartureTime : TimeOnly.MinValue, 
+    })
+    .ToList();
+// Dus!
+
+// Try to model something like a basic user (id, name) and then a billing user (id, address, bank account number)
+
+
 Console.WriteLine("Done!");

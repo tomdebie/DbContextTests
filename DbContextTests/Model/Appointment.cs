@@ -7,4 +7,6 @@ public class Appointment
     public DateTime AppointmentTime { get; set; }
 
     public AppointmentUtm? Utm { get; set; }
+    
+    //public AppointmentType Type { get; set; }
 }

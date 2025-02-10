@@ -16,6 +16,7 @@ public class TestDbContext : DbContext
     public DbSet<Paragraph> Paragraphs { get; set; }
 
     public DbSet<Appointment> Appointments { get; set; }
+    public DbSet<AppointmentPlasmaRide> PlasmaRideAppointments { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -62,6 +63,17 @@ public class TestDbContext : DbContext
                     //utm.HasForeignKey(a => a.AppointmentId);
                 }
             );
+
+
+            //x.Property(x => x.Type).HasColumnType("tinyint");
+            // x.HasDiscriminator<AppointmentType>(x => x.Type)
+            //     .HasValue<Appointment>(AppointmentType.Base)
+            //     .HasValue<AppointmentPlasmaRide>(AppointmentType.PlasmaRide);
+            
+            x.HasDiscriminator<AppointmentType>("type")
+                .HasValue<Appointment>(AppointmentType.Base)
+                .HasValue<AppointmentPlasmaRide>(AppointmentType.PlasmaRide);
+            x.Property("type").HasColumnType("tinyint");
         });
 
         modelBuilder.Entity<PlasmaRideResponsible>(x =>
