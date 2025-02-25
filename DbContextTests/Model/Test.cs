@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace DbContextTests.Model;
 
 public abstract class Test
@@ -10,6 +12,7 @@ public abstract class Test
     
     public int Id { get; set; }
     
-    private readonly List<Guid> _references = [];
+    
+    protected readonly List<Guid> _references = [];
     public IEnumerable<Guid> References => _references.AsReadOnly();
 }

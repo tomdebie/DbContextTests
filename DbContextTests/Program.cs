@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Client;
 
 var host = Host.CreateDefaultBuilder(args)
     //.ConfigureLogging(configuration =>
@@ -49,8 +50,22 @@ var test1 = new SuperTest([Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()]);
 context.Add(test1);
 
 context.SaveChanges();
+context.ChangeTracker.Clear();
 
 var test2 = await context.SuperTests.SingleOrDefaultAsync();
+test2.RemoveReferenceAt(1);
+
+context.Update(test2); // VERY IMPORTANT, readonly backing field will not auto detect changes!
+
+// var state = context.Entry(test2).State;
+// var properties = context.Entry(test2).Properties;
+
+context.SaveChanges();
+context.ChangeTracker.Clear();
+
+var test3 = await context.SuperTests.SingleOrDefaultAsync();
+
+Console.WriteLine(test3.References.Count()); // should be 2
 
 var blog = new Blog
 {

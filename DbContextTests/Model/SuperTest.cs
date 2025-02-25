@@ -8,4 +8,11 @@ public class SuperTest : Test
     }
     
     public string Name {get;set;}
+    
+    public DateTime ModifiedOn {get;set;}
+
+    public void RemoveReferenceAt(int index)
+    {
+        _references.RemoveAt(index);
+    }
 }

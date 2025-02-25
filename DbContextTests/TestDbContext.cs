@@ -1,5 +1,6 @@
 ﻿using DbContextTests.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 
 namespace DbContextTests;
@@ -91,6 +92,18 @@ public class TestDbContext : DbContext
             x.HasOne(x => x.Responsible)
                 .WithMany()
                 .IsRequired();
+
+        });
+
+        modelBuilder.Entity<Test>(x =>
+        {
+            x.Property(typeof(List<Guid>), "_references")
+                .HasColumnName("References")
+                .HasConversion(new ValueConverter<List<Guid>, string>(
+                    v => string.Join(';', v),
+                    v => string.IsNullOrEmpty(v) 
+                        ? new List<Guid>() 
+                        : v.Split(';', StringSplitOptions.None).Select(Guid.Parse).ToList()));
 
         });
     }
