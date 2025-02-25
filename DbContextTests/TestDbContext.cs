@@ -14,6 +14,9 @@ public class TestDbContext : DbContext
     public DbSet<Blog> Blogs { get; set; }
     public DbSet<Post> Posts { get; set; }
     public DbSet<Paragraph> Paragraphs { get; set; }
+    
+    public DbSet<Test> Tests { get; set; }
+    public DbSet<SuperTest> SuperTests { get; set; }
 
     public DbSet<Appointment> Appointments { get; set; }
     public DbSet<AppointmentPlasmaRide> PlasmaRideAppointments { get; set; }

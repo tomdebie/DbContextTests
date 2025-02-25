@@ -45,10 +45,16 @@ Console.WriteLine("Database recreated!");
 
 Console.WriteLine("Start");
 
+var test1 = new SuperTest([Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()]);
+context.Add(test1);
+
+context.SaveChanges();
+
+var test2 = await context.SuperTests.SingleOrDefaultAsync();
+
 var blog = new Blog
 {
     Name = "Test",
-    Posts = []
 };
 
 var post = new Post
@@ -75,11 +81,13 @@ var paragraph2 = new Paragraph
 };
 
 post.Paragraphs.AddRange([paragraph1, paragraph2]);
-blog.Posts.Add(post);
+blog.AddPost(post);
 context.Add(blog);
 
 Console.WriteLine($"Context changes: {context.ChangeTracker.HasChanges()}");
 await context.SaveChangesAsync();
+
+var fetchedBlog = await context.Blogs.FirstOrDefaultAsync();
 
 paragraph1.Text = "test";
 paragraph2.Text = "test";
@@ -92,7 +100,6 @@ var test = context.Paragraphs.Where(x => x.BlogId == blog.Id).ToListAsync();
 var trackedBlog = new TrackedBlog
 {
     Name = "Test2",
-    Posts = [],
     Source = "bloedserious",
     Medium = "email",
     Campaign = "plasma"
